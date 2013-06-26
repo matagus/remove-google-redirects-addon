@@ -1,9 +1,9 @@
 {
-    "name": "google-no-tracking-url", 
-    "license": "MPL 2.0", 
-    "author": "Agustín Méndez <matagus@gmail.com>", 
-    "version": "0.4", 
-    "fullName": "google-no-tracking-url", 
-    "id": "jid1-zUrvDCat3xoDSQ", 
-    "description": "It simply removes tracking code/redirect from Google search results."
+  "name": "google-no-tracking-url",
+  "fullName": "google-no-tracking-url",
+  "id": "jid1-zUrvDCat3xoDSQ",
+  "description": "It simply removes tracking code/redirect from Google search results.",
+  "author": "Matias Agustin Mendez",
+  "license": "MPL 2.0",
+  "version": "1.0.1"
 }
