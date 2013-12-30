@@ -5,7 +5,8 @@
   "description": "It simply removes tracking code/redirect from Google search results.",
   "author": "Matias Agustin Mendez",
   "license": "MPL 2.0",
-  "version": "1.3.0",
+  "version": "1.3.1",
+  "permissions": {"private-browsing": true},
   "preferences": [{
     "name": "aggresiveGoogleImagesCleanup",
     "title": "Aggresively clean Google Image urls",
