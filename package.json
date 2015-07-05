@@ -1,6 +1,6 @@
 {
+  "title": "Google Redirects Fixer",
   "name": "google-no-tracking-url",
-  "fullName": "google-no-tracking-url",
   "id": "jid1-zUrvDCat3xoDSQ@jetpack",
   "description": "It simply removes tracking code/redirect from Google search results.",
   "author": "Matias Agustin Mendez",
