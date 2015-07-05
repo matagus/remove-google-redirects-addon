@@ -2,6 +2,7 @@ const { Cc, Ci, Cr } = require("chrome");
 
 const GOOGLE_REGEXP = /http(s)?:\/\/((www|encrypted|news|images)\.)?google\.(.*?)\/url\?/;
 const GOOGLE_IMGRES_REGEXP = /http(s)?:\/\/(.*?\.)?google\.(.*?)\/imgres\?/;
+const GOOGLE_PLUS_REGEXP = /http(s)?:\/\/plus.url.google.com\/url\?/;
 
 var contextmenu = require("sdk/context-menu");
 var events = require("sdk/system/events");
@@ -20,8 +21,9 @@ function listener(event) {
   var aggresiveWithImageUrls = preferences.prefs.aggresiveGoogleImagesCleanup;
   var isSearchResult = GOOGLE_REGEXP.test(url);
   var isImageSearchResult = GOOGLE_IMGRES_REGEXP.test(url);
+  var isGooglePlusRedirect = GOOGLE_PLUS_REGEXP.test(url);
 
-  if (isSearchResult || (isImageSearchResult && aggresiveWithImageUrls)) {
+  if (isSearchResult || (isImageSearchResult && aggresiveWithImageUrls) || isGooglePlusRedirect) {
     // abort current request
     // Ref: https://developer.mozilla.org/en-US/docs/XUL/School_tutorial/Intercepting_Page_Loads
     channel.cancel(Cr.NS_BINDING_ABORTED);
@@ -44,7 +46,7 @@ function listener(event) {
     var domWin = channel.notificationCallbacks.getInterface(Ci.nsIDOMWindow);
     var browser = gBrowser.getBrowserForDocument(domWin.top.document);
 
-    if (isSearchResult) {
+    if (isSearchResult || isGooglePlusRedirect) {
       if (parsed_qs.q) {
         // On custom embedded searches Google uses q params instead of url
         // See for instance: http://www.google.com/cse/publicurl?cx=005900015654567331363:65whwnpnkim
