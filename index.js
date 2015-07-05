@@ -12,6 +12,7 @@ var utils = require("sdk/window/utils");
 var isValidURI = require("sdk/url").isValidURI;
 var preferences = require("sdk/simple-prefs");
 var self = require("sdk/self");
+var pageMod = require("sdk/page-mod");
 
 
 function listener(event) {
@@ -86,6 +87,13 @@ exports.main = function() {
     label: "A Mozilla Image",
     context: contextmenu.SelectorContext("a"),
     contentScriptFile: self.data.url("menu-script.js")
+  });
+
+  var pageMod = require("sdk/page-mod");
+  pageMod.PageMod({
+    //include: /((www|encrypted|news|images)\.)?google\.(.*?)/,
+    include: /http(s)?:\/\/((www|encrypted|news|images)\.)?google\..*/,
+    contentScriptFile: self.data.url("clicked-link.js")
   });
 };
 
