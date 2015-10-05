@@ -1,0 +1,22 @@
+{
+
+  "manifest_version": 2,
+  "name": "Google Redirects and Tracking Fixer",
+  "version": "2.0.1",
+
+  "applications": {
+    "gecko": {
+      "id": "jid1-zUrvDCat3xoDSQ@jetpack"
+    }
+  },
+
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking"
+  ],
+
+  "background": {
+    "scripts": ["background.js"]
+  }
+
+}
