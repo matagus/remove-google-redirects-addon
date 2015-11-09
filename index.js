@@ -10,7 +10,6 @@ var events = require("sdk/system/events");
 var querystring = require("sdk/querystring");
 var tabs = require("sdk/tabs");
 var tabUtils = require("sdk/tabs/utils");
-var utils = require("sdk/window/utils");
 var isValidURI = require("sdk/url").isValidURI;
 var preferences = require("sdk/simple-prefs");
 var self = require("sdk/self");
