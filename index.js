@@ -14,6 +14,7 @@ var isValidURI = require("sdk/url").isValidURI;
 var preferences = require("sdk/simple-prefs");
 var self = require("sdk/self");
 var pageMod = require("sdk/page-mod");
+var { ToggleButton } = require("sdk/ui/button/toggle");
 
 
 function listener(event) {
@@ -88,6 +89,33 @@ exports.main = function() {
     include: /http(s)?:\/\/((www|encrypted|news|images)\.)?google\..*/,
     contentScriptFile: self.data.url("clicked-link.js")
   });
+
+  var addonName = "Google Redirects & Tracking: ";
+  var turnOffText = "Click to turn it OFF";
+  var turnOnText = "Click to turn it ON";
+
+  var button = ToggleButton({
+    id: "toogle-redirects",
+    label: addonName + turnOffText,
+    icon: {
+      "16": self.data.url("icons/icon-16.png"),
+      "32": self.data.url("icons/icon-32.png")
+    },
+    onChange: function(state) {
+      state.label = addonName + (state.checked ? turnOffText : turnOnText);
+
+      if (state.checked) {
+        console.log("Addon turned ON");
+        events.on("http-on-modify-request", listener);
+      } else {
+        console.log("Addon turned OFF");
+        events.off("http-on-modify-request", listener);
+      }
+    }
+  });
+
+  // ON by default
+  button.checked = true;
 };
 
 
