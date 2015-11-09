@@ -4,10 +4,12 @@ const GOOGLE_REGEXP = /http(s)?:\/\/((www|encrypted|news|images)\.)?google\.(.*?
 const GOOGLE_IMGRES_REGEXP = /http(s)?:\/\/(.*?\.)?google\.(.*?)\/imgres\?/;
 const GOOGLE_PLUS_REGEXP = /http(s)?:\/\/plus.url.google.com\/url\?/;
 
+var core = require("sdk/view/core");
 var contextmenu = require("sdk/context-menu");
 var events = require("sdk/system/events");
 var querystring = require("sdk/querystring");
 var tabs = require("sdk/tabs");
+var tabUtils = require("sdk/tabs/utils");
 var utils = require("sdk/window/utils");
 var isValidURI = require("sdk/url").isValidURI;
 var preferences = require("sdk/simple-prefs");
@@ -34,18 +36,10 @@ function listener(event) {
     var qs = url.slice(position);
     parsed_qs = querystring.parse(qs);
 
-    // and then make a new request
-
-    /* the following does not work for https urls, dont know why
-    var navigation = channel.notificationCallbacks.getInterface(Ci.nsIWebNavigation);
-    navigation.loadURI(parsed_qs.url, Ci.nsIWebNavigation.LOAD_FLAGS_IS_LINK, null, null, null);
-    * so I have to do it this way: */
-
-    // get the current gbrowser (since the user may have several windows
-    // and tabs) and load the fixed URI
-    var gBrowser = utils.getMostRecentBrowserWindow().gBrowser;
-    var domWin = channel.notificationCallbacks.getInterface(Ci.nsIDOMWindow);
-    var browser = gBrowser.getBrowserForDocument(domWin.top.document);
+    // get the xul tab for the active tab
+    var xulTab = core.viewFor(tabs.activeTab);
+    // get the XUL browser for this tab
+    var xulBrowser = tabUtils.getBrowserForTab(xulTab);
 
     if (isSearchResult || isGooglePlusRedirect) {
       if (parsed_qs.q) {
@@ -53,7 +47,7 @@ function listener(event) {
         // See for instance: http://www.google.com/cse/publicurl?cx=005900015654567331363:65whwnpnkim
         if (isValidURI(parsed_qs.q)) {
           console.log("[CES] URL=", url, "redirected to", parsed_qs.q);
-          browser.loadURI(parsed_qs.q);
+          xulBrowser.loadURI(parsed_qs.q);
           return;
         }
       }
@@ -61,7 +55,7 @@ function listener(event) {
       if (parsed_qs.url) {
         if (isValidURI(parsed_qs.url)) {
           console.log("[URL] URL=", url, "redirected to", parsed_qs.url);
-          browser.loadURI(parsed_qs.url);
+          xulBrowser.loadURI(parsed_qs.url);
           return;
         }
       }
@@ -70,14 +64,14 @@ function listener(event) {
       if (parsed_qs.imgurl) {
         if (isValidURI(parsed_qs.imgurl)) {
           console.log("[Image] URL=", url, "redirected to", parsed_qs.imgurl);
-          browser.loadURI(parsed_qs.imgurl);
+          xulBrowser.loadURI(parsed_qs.imgurl);
           return;
         }
       }
     }
 
-    browser.loadURI(url);
-  };
+    xulBrowser.loadURI(url);
+  }
 };
 
 exports.main = function() {

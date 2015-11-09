@@ -6,7 +6,10 @@
   "author": "Matias Agustin Mendez",
   "license": "MPL 2.0",
   "version": "1.4.0",
-  "permissions": {"private-browsing": true},
+  "permissions": {
+    "private-browsing": true,
+    "multiprocess": true
+  },
   "preferences": [{
     "name": "aggresiveGoogleImagesCleanup",
     "title": "Aggresively clean Google Image urls",
