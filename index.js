@@ -17,8 +17,38 @@ var self = require("sdk/self");
 var pageMod = require("sdk/page-mod");
 
 
+function getWindowForRequest(request)
+{
+  if (request instanceof Ci.nsIRequest)
+  {
+    try
+    {
+      if (request.notificationCallbacks)
+      {
+        return request.notificationCallbacks
+                      .getInterface(Ci.nsILoadContext)
+                      .associatedWindow;
+      }
+    } catch(e) {}
+
+    try
+    {
+      if (request.loadGroup && request.loadGroup.notificationCallbacks)
+      {
+        return request.loadGroup.notificationCallbacks
+                      .getInterface(Ci.nsILoadContext)
+                      .associatedWindow;
+      }
+    } catch(e) {}
+  }
+
+  return null;
+}
+
 function listener(event) {
   var channel = event.subject.QueryInterface(Ci.nsIHttpChannel);
+  if (channel.requestMethod != "GET") return;
+
   var url = event.subject.URI.spec;
 
   var aggresiveWithImageUrls = preferences.prefs.aggresiveGoogleImagesCleanup;
@@ -36,10 +66,15 @@ function listener(event) {
     var qs = url.slice(position);
     parsed_qs = querystring.parse(qs);
 
-    // get the xul tab for the active tab
-    var xulTab = core.viewFor(tabs.activeTab);
-    // get the XUL browser for this tab
-    var xulBrowser = tabUtils.getBrowserForTab(xulTab);
+    var contentWindow = getWindowForRequest(channel);
+		//aDOMWindow this is the firefox window holding the tab
+		var aDOMWindow = contentWindow.top.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIWebNavigation).QueryInterface(Ci.nsIDocShellTreeItem).rootTreeItem.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIDOMWindow);
+		var gBrowser = aDOMWindow.gBrowser; //this is the gBrowser object of the firefox window this tab is in
+		var aTab = gBrowser._getTabForContentWindow(contentWindow.top); //this is the clickable tab xul element, the one found in the tab strip of the firefox window, aTab.linkedBrowser is same as browser var above //can stylize tab like aTab.style.backgroundColor = 'blue'; //can stylize the tab like aTab.style.fontColor = 'red';
+		var xulBrowser = aTab.linkedBrowser; //this is the browser within the tab //this is what the example in the previous section gives
+                //end getting other useful stuff// get the xul tab for the active tab
+    console.log("xulBrowser");
+    console.log(xulBrowser.loadURI)
 
     if (isSearchResult || isGooglePlusRedirect) {
       if (parsed_qs.q) {
