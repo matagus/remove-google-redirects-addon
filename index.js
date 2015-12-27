@@ -73,15 +73,13 @@ function listener(event) {
 		var aTab = gBrowser._getTabForContentWindow(contentWindow.top); //this is the clickable tab xul element, the one found in the tab strip of the firefox window, aTab.linkedBrowser is same as browser var above //can stylize tab like aTab.style.backgroundColor = 'blue'; //can stylize the tab like aTab.style.fontColor = 'red';
 		var xulBrowser = aTab.linkedBrowser; //this is the browser within the tab //this is what the example in the previous section gives
                 //end getting other useful stuff// get the xul tab for the active tab
-    console.log("xulBrowser");
-    console.log(xulBrowser.loadURI)
 
     if (isSearchResult || isGooglePlusRedirect) {
       if (parsed_qs.q) {
         // On custom embedded searches Google uses q params instead of url
         // See for instance: http://www.google.com/cse/publicurl?cx=005900015654567331363:65whwnpnkim
         if (isValidURI(parsed_qs.q)) {
-          console.log("[CES] URL=", url, "redirected to", parsed_qs.q);
+          console.debug("[CES] URL=", url, "redirected to", parsed_qs.q);
           xulBrowser.loadURI(parsed_qs.q);
           return;
         }
@@ -89,7 +87,7 @@ function listener(event) {
 
       if (parsed_qs.url) {
         if (isValidURI(parsed_qs.url)) {
-          console.log("[URL] URL=", url, "redirected to", parsed_qs.url);
+          console.debug("[URL] URL=", url, "redirected to", parsed_qs.url);
           xulBrowser.loadURI(parsed_qs.url);
           return;
         }
@@ -98,7 +96,7 @@ function listener(event) {
       // isImageSearchResult is true
       if (parsed_qs.imgurl) {
         if (isValidURI(parsed_qs.imgurl)) {
-          console.log("[Image] URL=", url, "redirected to", parsed_qs.imgurl);
+          console.debug("[Image] URL=", url, "redirected to", parsed_qs.imgurl);
           xulBrowser.loadURI(parsed_qs.imgurl);
           return;
         }
