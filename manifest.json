@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "google-no-tracking-url",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "author": "Matias Agustin Mendez",
   "description": "It simply removes tracking code/redirect from Google search results.",
   "permissions": [
@@ -14,10 +14,11 @@
   },
   "applications": {
     "gecko": {
-      "id": "jid1-zUrvDCat3xoDSQ@jetpack"
+      "id": "jid1-zUrvDCat3xoDSQ@jetpack",
+      "strict_min_version": "54.0"
     }
   },
   "icons": {
-    "96": "icon.png"
+    "96": "data/icon.png"
   }
 }
