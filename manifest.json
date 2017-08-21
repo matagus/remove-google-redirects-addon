@@ -20,5 +20,6 @@
   },
   "icons": {
     "96": "data/icon.png"
-  }
+  },
+  "incognito": "spanning"
 }
