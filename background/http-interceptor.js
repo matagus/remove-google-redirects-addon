@@ -54,6 +54,12 @@ function logURL(requestDetails) {
 
     console.log("Opening: " + to_url);
 
+    if (requestDetails.type != "sub_frame") {
+      return {
+        redirectUrl: to_url
+      };
+    }
+
     browser.tabs.update(requestDetails.tabId, {url: to_url});
     return {cancel: true};
   }
